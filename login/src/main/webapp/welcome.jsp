@@ -6,7 +6,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%
-	LoginUtils.checkLogin(request, response);
+	if(!LoginUtils.checkLogin(request, response))
+		return;
 
 	LoginContextManager contextManager = ServiceFactory.createService(LoginContextManager.class, true);
 	String contextSN = (String)session.getAttribute("contextSerialNumber");

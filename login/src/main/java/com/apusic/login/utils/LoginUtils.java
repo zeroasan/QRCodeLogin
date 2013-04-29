@@ -36,6 +36,6 @@ public class LoginUtils {
 	
 	public static void redirectToLoginPage(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("login.jsp");
+		response.sendRedirect(LOGIN_PAGE);
 	}
 }

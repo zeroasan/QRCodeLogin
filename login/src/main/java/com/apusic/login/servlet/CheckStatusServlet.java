@@ -9,13 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.apusic.login.LoginContext;
+import com.apusic.login.LoginStatusEnum;
 import com.apusic.login.service.LoginContextManager;
 import com.apusic.login.service.ServiceFactory;
 
-public class AuthzServlet extends HttpServlet {
+
+public class CheckStatusServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
 	private LoginContextManager contextManager;
 
 	@Override
@@ -27,37 +28,36 @@ public class AuthzServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		this.doPost(request, response);
+		doPost(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//validate user has logined already.
-		//Get the current principal name
+		
 		HttpSession session = request.getSession(true);
 		String contextSN = (String)session.getAttribute("contextSerialNumber");
-		LoginContext currentContext = contextManager.getLoginContext(contextSN);
 		
-		if(currentContext == null || !currentContext.isAuthenticated()) {
-			toLoginPage(request, response);
-			return;
+		
+		LoginStatusEnum status = null;
+		if(contextSN == null) {
+			status = LoginStatusEnum.CONTEXT_EMPTY;
+		} else {
+			LoginContext loginContext = contextManager.getLoginContext(contextSN);
+			if(loginContext.isTimeout()) {
+				status = LoginStatusEnum.CONTEXT_TIME_OUT;
+			} else if(loginContext.isAuthenticated()) {
+				status = LoginStatusEnum.LOGINED;
+			} else {
+				status = LoginStatusEnum.NOT_LOGINED;
+			}
 		}
-		
-		//get the loginContext that you want to auth login
-		String sn = request.getParameter("sn");
-		LoginContext otherLoginContext = contextManager.getLoginContext(sn);
-		otherLoginContext.grantAuthentication(currentContext.getSerialNumber(), currentContext.getPrincipalName());
-		
-		
-		request.setAttribute("message", "Successful");
-		request.getRequestDispatcher("authLogin.jsp").forward(request, response);
+		response.getWriter().println(getStatusResult(status));
 		
 	}
 	
-	private void toLoginPage(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/login.jsp").forward(request, response);
+	private String getStatusResult(LoginStatusEnum e) {
+		return String.format("{\"status\": %d}", e.getStatusCode());
 	}
-
+	
 }

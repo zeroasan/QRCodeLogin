@@ -12,6 +12,10 @@
       <servlet-name>AuthzServlet</servlet-name>
       <servlet-class>com.apusic.login.servlet.AuthzServlet</servlet-class>
   </servlet>
+  <servlet>
+      <servlet-name>CheckStatusServlet</servlet-name>
+      <servlet-class>com.apusic.login.servlet.CheckStatusServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
       <servlet-name>LoginServlet</servlet-name>
@@ -20,6 +24,10 @@
   <servlet-mapping>
       <servlet-name>AuthzServlet</servlet-name>
       <url-pattern>/authz</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+      <servlet-name>CheckStatusServlet</servlet-name>
+      <url-pattern>/status</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

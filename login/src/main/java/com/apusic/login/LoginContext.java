@@ -12,6 +12,10 @@ public class LoginContext {
 	
 	private boolean authenticated;
 	
+	private boolean granted;
+	
+	private String granteeSerialNumberNumber;
+	
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -55,4 +59,28 @@ public class LoginContext {
 	public boolean isTimeout() {
 		return !authenticated && date + TIMEOUT_INTERVAL < System.currentTimeMillis();
 	}
+
+
+	public boolean isGranted() {
+		return granted;
+	}
+
+
+	public void setGranted(boolean granted) {
+		this.granted = granted;
+	}
+	
+	
+	public void grantAuthentication(String granteeSerialNumberNumber, String principalName) {
+		this.authenticated = true;
+		this.granted = true;
+		this.granteeSerialNumberNumber = granteeSerialNumberNumber;
+		this.principalName = principalName;
+	}
+
+
+	public String getGranteeSerialNumberNumber() {
+		return granteeSerialNumberNumber;
+	}
+
 }
