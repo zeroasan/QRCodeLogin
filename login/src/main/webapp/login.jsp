@@ -47,5 +47,10 @@
 			Password: <input type="password" size="12" name="password"></br>
 			<input type="submit" value="Submit">
 		</form>
+		
+		
+		<div>
+			<img alt="sn qr image" src="/login/qr">
+		</div>
 	</body>
 </html>
