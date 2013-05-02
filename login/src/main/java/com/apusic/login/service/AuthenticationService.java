@@ -6,6 +6,6 @@ public interface AuthenticationService {
 	
 	boolean auth();
 
-	boolean authToken(Token token);
+	boolean authToken(AuthnToken token);
 	
 }
