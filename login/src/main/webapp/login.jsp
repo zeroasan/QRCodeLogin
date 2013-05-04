@@ -1,56 +1,117 @@
-<%@ page isELIgnored="false" %> 
+<%@ page isELIgnored="false"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="com.apusic.login.*"%>
 <%@ page import="com.apusic.login.service.*"%>
+
 <jsp:include page="prelogin.jsp"></jsp:include>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
+
+<html lang="cn_zh">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<style type="text/css">
+	body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+
+	.form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+</style>
 
 
-<html>
-	<head>
-		<script type="text/javascript" src="/login/js/jquery-1.9.1.js"></script>
-		<script type="text/javascript">
-			function checkLoginStatus() {
-				console.log("check login status.");
-				
-				$.ajax({
-					url: "/login/status",
-					dataType: "json",
-					success: function(data, textStatus, jqXHR) {
-						console.log("status=" + data.status);
-						if(data.status == 0) {
-							//relocate to welcome page
-							window.location = "/login/";
-						} else {
-							//check again after 3 seconds
-							setTimeout(checkLoginStatus, 3000);
-						}
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-						console.log(textStatus);
-						setTimeout(checkLoginStatus, 3000);
-					},
-					cache: false
-				});
-			}
-			
-			$(function(){
-				checkLoginStatus();
-			});
-		</script>
-	</head>
-	<body>
-		<h2>Hello World! Your login Context Serial Number is <span id="sn"><%=(String)session.getAttribute("contextSerialNumber") %></span></h2>
-		<form action="login" method="post">
-			Username: <input type="text" size="12" name="username"></br>
-			Password: <input type="password" size="12" name="password"></br>
-			<input type="submit" value="Submit">
+<script type="text/javascript" src="/login/js/jquery-1.9.1.js"></script>
+<script type="text/javascript">
+	function checkLoginStatus() {
+		try {console.log("check login status."); } catch(e){};
+
+		$.ajax({
+			url : "/login/status",
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				try { console.log("status=" + data.status); } catch(e){};
+				if (data.status == 0) {
+					//relocate to welcome page
+					window.location = "/login/";
+				} else {
+					//check again after 3 seconds
+					setTimeout(checkLoginStatus, 3000);
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				try { console.log(textStatus); } catch(e){};
+				setTimeout(checkLoginStatus, 3000);
+			},
+			cache : false
+		});
+	}
+	
+	function login() {
+		try { console.log("login action"); } catch(e){};
+		
+		var username = $("input[name=username]").val();
+		var password = $("input[name=password]").val();
+		
+		
+		$.ajax({
+			url : "/login/login",
+			type: "POST",
+			data : {"username": username, "password": password},
+			dataType : "json",
+			success : function(data, textStatus, jqXHR) {
+				try { console.log("result=" + data.result); } catch(e){};
+				if (data.result == "successful") {
+					//relocate to welcome page
+					window.location = "/login/";
+				} else {
+					$("#message").text("User Name or password is wrong.");
+					$("#message").css("visibility", "");
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				try { console.log(textStatus); } catch(e){};
+			},
+			cache : false
+		});
+	}
+
+	$(function() {
+		checkLoginStatus();
+	});
+</script>
+</head>
+<body>
+	<div class="container">
+		<form class="form-signin">
+			<div id="message" style="visibility: hidden; color: red;"></div>
+			<h2 class="form-signin-heading">Please sign in</h2>
+			<input name="username" type="text" class="input-block-level" placeholder="Email address"> 
+			<input name="password" type="password" class="input-block-level" placeholder="Password"> 
+			<input type="button" class="btn btn-large btn-primary" value="Sign in" onclick="login();">
 		</form>
-		
-		
 		<div>
 			<img alt="sn qr image" src="/login/qr">
+			<h2>
+				Login Context Serial Number is <span id="sn"><%=(String) session.getAttribute("contextSerialNumber")%></span>
+			</h2>
 		</div>
-	</body>
+	</div>
+	<!-- /container -->
+</body>
 </html>

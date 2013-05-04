@@ -20,5 +20,6 @@
 		<h2>Hello, <%=loginContext.getPrincipalName() %></h2>
 		<h2>Your login Context Serial Number is <span id="sn"><%=(String)session.getAttribute("contextSerialNumber") %></span></h2>
 		<a href="authLogin.jsp">Authz other logins.</a>
+		<a href="logout.jsp">Log out.</a>
 	</body>
 </html>

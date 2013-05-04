@@ -24,11 +24,6 @@ public class LoginServlet extends HttpServlet {
 		contextManager = ServiceFactory.createService(LoginContextManager.class, true);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doPost(request, response);
-	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,12 +45,12 @@ public class LoginServlet extends HttpServlet {
 		
 		request.setAttribute("loginContext", loginContext);
 		if(loginContext.isAuthenticated()) {
-			toNormalPage(request, response);
+			loginSuccessfully(request, response);
 		} else {
 			if(attemptToLogin(request, response)) {
-				toNormalPage(request, response);
+				loginSuccessfully(request, response);
 			} else {
-				toLoginPage(request, response);
+				loginFailed(request, response);
 			}
 		}
 		
@@ -75,14 +70,13 @@ public class LoginServlet extends HttpServlet {
 		return false;
 	}
 
-	private void toLoginPage(HttpServletRequest request,
+	private void loginFailed(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/login.jsp").forward(request, response);
+		response.getWriter().println("{\"result\": \"failed\"}");
 	}
 
-	private void toNormalPage(HttpServletRequest request,
+	private void loginSuccessfully(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/authLogin.jsp").forward(request, response);
+		response.getWriter().println("{\"result\": \"successful\"}");
 	}
-
 }

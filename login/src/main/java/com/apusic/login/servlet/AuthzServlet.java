@@ -40,7 +40,7 @@ public class AuthzServlet extends HttpServlet {
 		LoginContext currentContext = contextManager.getLoginContext(contextSN);
 		
 		if(currentContext == null || !currentContext.isAuthenticated()) {
-			toLoginPage(request, response);
+			response.getWriter().println("{\"result\": \"failed\"}");
 			return;
 		}
 		
@@ -49,15 +49,7 @@ public class AuthzServlet extends HttpServlet {
 		LoginContext otherLoginContext = contextManager.getLoginContext(sn);
 		otherLoginContext.grantAuthentication(currentContext.getSerialNumber(), currentContext.getPrincipalName());
 		
-		
-		request.setAttribute("message", "Successful");
-		request.getRequestDispatcher("authLogin.jsp").forward(request, response);
+		response.getWriter().println("{\"result\": \"successful\"}");
 		
 	}
-	
-	private void toLoginPage(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/login.jsp").forward(request, response);
-	}
-
 }
