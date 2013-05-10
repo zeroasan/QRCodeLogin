@@ -18,17 +18,13 @@ package com.apusic.login.zxing;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -43,7 +39,6 @@ import com.apusic.login4android.GrantActivity;
 import com.apusic.login4android.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -59,38 +54,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
-  private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
-  private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
-
-  private static final String PACKAGE_NAME = "com.google.zxing.client.android";
-  private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
-  private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
-  private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
-  private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
-  private static final String RETURN_URL_PARAM = "ret";
-  private static final String RAW_PARAM = "raw";
-
   public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
-
-  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
-      EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
-                 ResultMetadataType.SUGGESTED_PRICE,
-                 ResultMetadataType.ERROR_CORRECTION_LEVEL,
-                 ResultMetadataType.POSSIBLE_COUNTRY);
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
-  private Result savedResultToShow;
   private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
-  private Result lastResult;
   private boolean hasSurface;
-  private boolean copyToClipboard;
-  private IntentSource source;
-  private String sourceUrl;
-  private String returnUrlTemplate;
-  private boolean returnRaw;
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
   private InactivityTimer inactivityTimer;
@@ -119,9 +90,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
-
-//    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
   }
 
   @Override
@@ -141,7 +109,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     statusView = (TextView) findViewById(R.id.status_view);
 
     handler = null;
-    lastResult = null;
 
     resetStatusView();
 
@@ -158,78 +125,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     beepManager.updatePrefs();
-
     inactivityTimer.onResume();
 
-    Intent intent = getIntent();
-
-    copyToClipboard = intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true);
-
-    source = IntentSource.NONE;
     decodeFormats = null;
     characterSet = null;
-
-    if (intent != null) {
-
-      String action = intent.getAction();
-      String dataString = intent.getDataString();
-
-      if (Intents.Scan.ACTION.equals(action)) {
-
-        // Scan the formats the intent requested, and return the result to the calling activity.
-        source = IntentSource.NATIVE_APP_INTENT;
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
-
-        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
-          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
-          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
-          if (width > 0 && height > 0) {
-            cameraManager.setManualFramingRect(width, height);
-          }
-        }
-        
-        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-        if (customPromptMessage != null) {
-          statusView.setText(customPromptMessage);
-        }
-
-      } else if (dataString != null &&
-                 dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-                 dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
-
-        // Scan only products and send the result to mobile Product Search.
-        source = IntentSource.PRODUCT_SEARCH_LINK;
-        sourceUrl = dataString;
-        decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
-
-      } else if (isZXingURL(dataString)) {
-
-        // Scan formats requested in query string (all formats if none specified).
-        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
-        source = IntentSource.ZXING_LINK;
-        sourceUrl = dataString;
-        Uri inputUri = Uri.parse(sourceUrl);
-        returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
-        returnRaw = inputUri.getQueryParameter(RAW_PARAM) != null;
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
-
-      }
-
-      characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-
-    }
-  }
-  
-  private static boolean isZXingURL(String dataString) {
-    if (dataString == null) {
-      return false;
-    }
-    for (String url : ZXING_URLS) {
-      if (dataString.startsWith(url)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
@@ -258,16 +157,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
-        if (source == IntentSource.NATIVE_APP_INTENT) {
           setResult(RESULT_CANCELED);
           finish();
           return true;
-        }
-        if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-          restartPreviewAfterDelay(0L);
-          return true;
-        }
-        break;
       case KeyEvent.KEYCODE_FOCUS:
       case KeyEvent.KEYCODE_CAMERA:
         // Handle these events so they don't launch the Camera app
@@ -281,22 +173,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return true;
     }
     return super.onKeyDown(keyCode, event);
-  }
-
-  private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
-    // Bitmap isn't used yet -- will be used soon
-    if (handler == null) {
-      savedResultToShow = result;
-    } else {
-      if (result != null) {
-        savedResultToShow = result;
-      }
-      if (savedResultToShow != null) {
-        Message message = Message.obtain(handler, R.id.decode_succeeded, savedResultToShow);
-        handler.sendMessage(message);
-      }
-      savedResultToShow = null;
-    }
   }
 
   @Override
@@ -328,17 +204,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
     inactivityTimer.onActivity();
-    lastResult = rawResult;
 
     Log.e("QRLogin", "Get Result, do nothing." + rawResult.getText());
     
+    //TODO 获取的二维码使用特殊的前导符或者格式，避免扫描错误的问题。
     Intent intent = new Intent();
     intent.putExtra(SERIAL_NUMBER, rawResult.getText());
     intent.setClass(CaptureActivity.this, GrantActivity.class);
     startActivity(intent);
     finish();
-    
-    //handle qrcode result
   }
 
 
@@ -356,13 +230,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (handler == null) {
         handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
       }
-      decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {
       Log.w(TAG, ioe);
       displayFrameworkBugMessageAndExit();
     } catch (RuntimeException e) {
       // Barcode Scanner has seen crashes in the wild of this variety:
-      // java.?lang.?RuntimeException: Fail to connect to camera service
+      // java.lang.RuntimeException: Fail to connect to camera service
       Log.w(TAG, "Unexpected error initializing camera", e);
       displayFrameworkBugMessageAndExit();
     }
@@ -389,7 +262,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     statusView.setText(R.string.msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
-    lastResult = null;
   }
 
   public void drawViewfinder() {
