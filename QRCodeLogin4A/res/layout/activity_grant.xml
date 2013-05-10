@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/grant_bg"
+    tools:context=".BlankActivity" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        android:layout_weight="0.24"
+        android:src="@drawable/grant_image_bigicon" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="273dp" >
+
+        <Button
+            android:id="@+id/submit_grant_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/submit_grant_button_view"
+            android:textColor="@color/submit_grant_button_text"
+            android:text="@string/submit_grant_button_text" 
+            android:onClick="submitGrant"/>
+
+        <Button
+            android:id="@+id/cancel_grant_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/submit_grant_button"
+            android:background="@color/cancel_grant_button_view"
+            android:textColor="@color/cancel_grant_button_text"
+            android:layout_marginTop="10dp"
+            android:text="@string/cancel_grant_button_text" 
+            android:onClick="cancelGrant"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
