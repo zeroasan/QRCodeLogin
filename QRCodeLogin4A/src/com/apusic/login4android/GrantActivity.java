@@ -1,17 +1,16 @@
 package com.apusic.login4android;
 
-import com.apusic.login.client.QRLoginService;
-import com.apusic.login.client.impl.QRLoginServiceImpl;
-
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+
+import com.apusic.login.client.QRLoginService;
+import com.apusic.login.client.impl.QRLoginServiceImpl;
 
 public class GrantActivity extends Activity {
 	
@@ -36,17 +35,9 @@ public class GrantActivity extends Activity {
 	
 	//发送授权
 	public void submitGrant(View view) {
-		
-		
 		//主进程中不能直接调用网络，需要异步调用
-		GrantTask grantTask = new GrantTask();
-		grantTask.execute(new Object[]{});
-		
-		//alert()
-		Intent intent = new Intent();  
-        intent.setClass(GrantActivity.this, MainActivity.class);
-        startActivity(intent); 
-		finish();
+		GrantTask grantTask = new GrantTask(this);
+		grantTask.execute(new Void[]{});
 	}
 	
 	//取消授权
@@ -59,15 +50,39 @@ public class GrantActivity extends Activity {
 	
 	
 	
-	class GrantTask extends AsyncTask {
-
-		@Override
-		protected Boolean doInBackground(Object... params) {
-			QRLoginService loginService = QRLoginServiceImpl.getInstance();
-			loginService.grant(serialNumber);
-			return true;
+	class GrantTask extends AsyncTask<Void, Void, Boolean> {
+		
+		private GrantActivity activity;
+		
+		GrantTask(GrantActivity activity) {
+			this.activity = activity; 
 		}
 
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			QRLoginService loginService = QRLoginServiceImpl.getInstance();
+			return loginService.grant(serialNumber);
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean result) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+			
+			builder.setMessage(result ? R.string.grant_success : R.string.grant_failed)
+			       .setCancelable(false)
+			       .setPositiveButton(R.string.grant_comfirm, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	    Intent intent = new Intent();  
+			                intent.setClass(activity, MainActivity.class);
+			                startActivity(intent); 
+			       			finish();
+			           }
+			       });
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+
+		
 		
 	}
 	

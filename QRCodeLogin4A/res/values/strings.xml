@@ -143,5 +143,10 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="open_scan_button">开始扫描</string>
     <string name="title_activity_grant">GrantActivity</string>
+    
+    <string name="grant_success">授权成功</string>
+    <string name="grant_failed">授权成功</string>
+    <string name="grant_comfirm">确认</string>
+    
 
 </resources>

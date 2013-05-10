@@ -103,8 +103,8 @@ public final class R {
         public static final int beep=0x7f040000;
     }
     public static final class string {
-        public static final int action_sign_in_register=0x7f080081;
-        public static final int action_sign_in_short=0x7f080082;
+        public static final int action_sign_in_register=0x7f080084;
+        public static final int action_sign_in_short=0x7f080085;
         public static final int app_name=0x7f080000;
         public static final int app_picker_name=0x7f080001;
         public static final int bookmark_picker_name=0x7f080002;
@@ -141,10 +141,13 @@ public final class R {
         public static final int contents_phone=0x7f080020;
         public static final int contents_sms=0x7f080021;
         public static final int contents_text=0x7f080022;
-        public static final int error_field_required=0x7f080088;
-        public static final int error_incorrect_password=0x7f080087;
-        public static final int error_invalid_email=0x7f080085;
-        public static final int error_invalid_password=0x7f080086;
+        public static final int error_field_required=0x7f08008b;
+        public static final int error_incorrect_password=0x7f08008a;
+        public static final int error_invalid_email=0x7f080088;
+        public static final int error_invalid_password=0x7f080089;
+        public static final int grant_comfirm=0x7f080081;
+        public static final int grant_failed=0x7f080080;
+        public static final int grant_success=0x7f08007f;
         public static final int hello_world=0x7f080079;
         public static final int history_clear_one_history_text=0x7f080024;
         public static final int history_clear_text=0x7f080023;
@@ -153,10 +156,10 @@ public final class R {
         public static final int history_empty_detail=0x7f080027;
         public static final int history_send=0x7f080028;
         public static final int history_title=0x7f080029;
-        public static final int login_progress_signing_in=0x7f080084;
+        public static final int login_progress_signing_in=0x7f080087;
         public static final int menu_encode_mecard=0x7f08002a;
         public static final int menu_encode_vcard=0x7f08002b;
-        public static final int menu_forgot_password=0x7f080083;
+        public static final int menu_forgot_password=0x7f080086;
         public static final int menu_help=0x7f08002c;
         public static final int menu_history=0x7f08002d;
         public static final int menu_settings=0x7f08002e;
@@ -221,8 +224,8 @@ public final class R {
         public static final int preferences_vibrate_title=0x7f080068;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f08007f;
-        public static final int prompt_password=0x7f080080;
+        public static final int prompt_email=0x7f080082;
+        public static final int prompt_password=0x7f080083;
         public static final int result_address_book=0x7f080069;
         public static final int result_calendar=0x7f08006a;
         public static final int result_email_address=0x7f08006b;
