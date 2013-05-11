@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (C) 2008 ZXing authors
 
@@ -14,17 +14,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
-
-  <SurfaceView android:id="@+id/preview_view"
-               android:layout_width="fill_parent"
-               android:layout_height="fill_parent"/>
-
-  <com.apusic.login.zxing.ViewfinderView
-      android:id="@+id/viewfinder_view"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"/>
-
-</FrameLayout>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/preferences_common_title">
+    <EditTextPreference
+        android:key="preferences_application_url"
+        android:title="@string/preferences_application_url_title"
+        android:summary="@string/preferences_application_url_summary"/>
+    
+  </PreferenceCategory>
+</PreferenceScreen>

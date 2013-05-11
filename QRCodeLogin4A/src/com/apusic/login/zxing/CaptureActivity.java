@@ -32,7 +32,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.apusic.login.zxing.camera.CameraManager;
 import com.apusic.login4android.GrantActivity;
@@ -59,8 +58,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
   private ViewfinderView viewfinderView;
-  private TextView statusView;
-  private View resultView;
   private boolean hasSurface;
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
@@ -104,9 +101,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
-
-    resultView = findViewById(R.id.result_view);
-    statusView = (TextView) findViewById(R.id.status_view);
 
     handler = null;
 
@@ -205,7 +199,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void handleDecode(Result rawResult, Bitmap barcode) {
     inactivityTimer.onActivity();
 
-    Log.e("QRLogin", "Get Result, do nothing." + rawResult.getText());
+    beepManager.playBeepSoundAndVibrate();
+    
+    Log.e("QRLogin", "Decode successful, code=" + rawResult.getText());
     
     //TODO 获取的二维码使用特殊的前导符或者格式，避免扫描错误的问题。
     Intent intent = new Intent();
@@ -258,9 +254,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private void resetStatusView() {
-    resultView.setVisibility(View.GONE);
-    statusView.setText(R.string.msg_default_status);
-    statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
   }
 

@@ -29,7 +29,7 @@ public class GrantActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_blank, menu);
+		getMenuInflater().inflate(R.menu.activity_grant, menu);
 		return true;
 	}
 	
@@ -70,7 +70,7 @@ public class GrantActivity extends Activity {
 			
 			builder.setMessage(result ? R.string.grant_success : R.string.grant_failed)
 			       .setCancelable(false)
-			       .setPositiveButton(R.string.grant_comfirm, new DialogInterface.OnClickListener() {
+			       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	    Intent intent = new Intent();  
 			                intent.setClass(activity, MainActivity.class);

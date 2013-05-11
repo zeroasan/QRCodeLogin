@@ -27,7 +27,7 @@
   </servlet-mapping>
   <servlet-mapping>
       <servlet-name>AuthzServlet</servlet-name>
-      <url-pattern>/authz</url-pattern>
+      <url-pattern>/grant</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
       <servlet-name>CheckStatusServlet</servlet-name>

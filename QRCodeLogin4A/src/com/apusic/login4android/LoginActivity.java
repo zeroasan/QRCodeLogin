@@ -4,14 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -25,23 +29,19 @@ import com.apusic.login.client.impl.QRLoginServiceImpl;
  * well.
  */
 public class LoginActivity extends Activity {
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
 
-	// Values for email and password at the time of the login attempt.
-	private String mEmail;
+	// Values for username and password at the time of the login attempt.
+	private String mAppUrl;
+	
+	private String mUserName;
 	private String mPassword;
 
 	// UI references.
-	private EditText mEmailView;
+	private EditText mUserNameView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
@@ -56,9 +56,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-		mEmailView = (EditText) findViewById(R.id.email);
-		mEmailView.setText(mEmail);
+		mUserNameView = (EditText) findViewById(R.id.username);
+		mUserNameView.setText(mUserName);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -86,6 +85,21 @@ public class LoginActivity extends Activity {
 					}
 				});
 	}
+	
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		mAppUrl = PreferenceManager.getDefaultSharedPreferences(this).getString(PreferencesActivity.KEY_APPLICATION_URL, null);
+		//如果URL未空，则提示设置
+		if(mAppUrl == null) {
+			showURLNotSetAlert();
+		}
+	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,23 +107,39 @@ public class LoginActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_login, menu);
 		return true;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+        case R.id.menu_preference:
+        	showPreferences();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+		}
+	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
-	 * If there are form errors (invalid email, missing fields, etc.), the
+	 * If there are form errors (invalid username, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
 		if (mAuthTask != null) {
 			return;
 		}
-
+		
 		// Reset errors.
-		mEmailView.setError(null);
+		mUserNameView.setError(null);
 		mPasswordView.setError(null);
 
+		//如果URL未空，则提示设置
+		if(mAppUrl == null) {
+			showURLNotSetAlert();
+		}
+		
 		// Store values at the time of the login attempt.
-		mEmail = mEmailView.getText().toString();
+		mUserName = mUserNameView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
 		boolean cancel = false;
@@ -126,10 +156,10 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
+		// Check for a valid username address.
+		if (TextUtils.isEmpty(mUserName)) {
+			mUserNameView.setError(getString(R.string.error_field_required));
+			focusView = mUserNameView;
 			cancel = true;
 		}
 
@@ -195,7 +225,7 @@ public class LoginActivity extends Activity {
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			qrLoginService = QRLoginServiceImpl.createInstance(mEmail, mPassword);
+			qrLoginService = QRLoginServiceImpl.createInstance(mAppUrl, mUserName, mPassword);
 			try {
 				qrLoginService.refreshSession();
 			} catch(Exception ex) {
@@ -228,5 +258,29 @@ public class LoginActivity extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 		}
+	}
+	
+	
+	private void showURLNotSetAlert() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.application_url_not_set)
+		       .setCancelable(false)
+		       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	    Intent intent = new Intent();  
+		                intent.setClass(LoginActivity.this, PreferencesActivity.class);
+		                startActivity(intent); 
+		       			finish();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	private void showPreferences() {
+		Intent intent = new Intent();  
+        intent.setClass(LoginActivity.this, PreferencesActivity.class);
+        startActivity(intent); 
+		finish();
 	}
 }

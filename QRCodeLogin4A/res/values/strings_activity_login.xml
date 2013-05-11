@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
+    <string name="prompt_username">User Name</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in_register"><b>Sign in</b> or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -12,4 +12,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
+    <string name="menu_preference">配置</string>
+    <string name="application_url_not_set">应用URL地址未配置</string>
+    
 </resources>
