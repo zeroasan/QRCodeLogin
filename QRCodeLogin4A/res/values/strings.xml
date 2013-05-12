@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Barcode Scanner</string>
+    <string name="app_name">二维码登录</string>
     <string name="app_picker_name">Applications</string>
     <string name="menu_encode_mecard">Use MECARD</string>
     <string name="menu_encode_vcard">Use vCard</string>
@@ -38,7 +38,7 @@
     
     <string name="hello_world">Hello World!</string>
 
-    <string name="title_activity_preferences">通用配置</string>
+    <string name="title_activity_preferences">配置</string>
     <string name="preferences_common_title">通用配置</string>
     <string name="preferences_application_url_title">应用URL地址</string>
     <string name="preferences_application_url_summary"></string>
