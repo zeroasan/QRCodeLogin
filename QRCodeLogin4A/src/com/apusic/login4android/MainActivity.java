@@ -33,6 +33,11 @@ public class MainActivity extends Activity {
 	
 	public void logoutUser(View view) {
 		QRLoginServiceImpl.getInstance().logout();
+		
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this, LoginActivity.class);  
+		startActivity(intent);
+		
 		finish();
 	}
 
