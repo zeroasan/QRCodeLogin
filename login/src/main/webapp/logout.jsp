@@ -7,6 +7,6 @@
 
 <%
 	session.removeAttribute("contextSerialNumber");
-	response.sendRedirect("/login");
+	response.sendRedirect(request.getContextPath());
 %>
 

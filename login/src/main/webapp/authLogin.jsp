@@ -17,14 +17,14 @@
 
 <html>
 	<head>
-		<script type="text/javascript" src="/login/js/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/js/jquery-1.9.1.js"></script>
 		<script type="text/javascript">
 			function grant() {
 				
 				var sn = $("input[name=sn]").val();
 				
 				$.ajax({
-					url : "/login/authz",
+					url : "<%=request.getContextPath() %>/grant",
 					dataType : "json",
 					data : {"sn": sn},
 					success : function(data, textStatus, jqXHR) {
@@ -39,7 +39,6 @@
 					},
 					error : function(jqXHR, textStatus, errorThrown) {
 						console.log(textStatus);
-						setTimeout(checkLoginStatus, 3000);
 					},
 					cache : false
 				});

@@ -36,19 +36,19 @@
 </style>
 
 
-<script type="text/javascript" src="/login/js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath() %>/js/jquery-1.9.1.js"></script>
 <script type="text/javascript">
 	function checkLoginStatus() {
 		try {console.log("check login status."); } catch(e){};
 
 		$.ajax({
-			url : "/login/status",
+			url : "<%=request.getContextPath() %>/status",
 			dataType : "json",
 			success : function(data, textStatus, jqXHR) {
 				try { console.log("status=" + data.status); } catch(e){};
 				if (data.status == 0) {
 					//relocate to welcome page
-					window.location = "/login/";
+					window.location = "<%=request.getContextPath() %>";
 				} else {
 					//check again after 3 seconds
 					setTimeout(checkLoginStatus, 3000);
@@ -70,7 +70,7 @@
 		
 		
 		$.ajax({
-			url : "/login/login",
+			url : "<%=request.getContextPath() %>/login",
 			type: "POST",
 			data : {"username": username, "password": password},
 			dataType : "json",
@@ -78,7 +78,7 @@
 				try { console.log("result=" + data.result); } catch(e){};
 				if (data.result == "successful") {
 					//relocate to welcome page
-					window.location = "/login/";
+					window.location = "<%=request.getContextPath() %>" + "/";
 				} else {
 					$("#message").text("User Name or password is wrong.");
 					$("#message").css("visibility", "");
@@ -106,7 +106,7 @@
 			<input type="button" class="btn btn-large btn-primary" value="Sign in" onclick="login();">
 		</form>
 		<div>
-			<img alt="sn qr image" src="/login/qr">
+			<img alt="sn qr image" src="<%=request.getContextPath() %>/qr">
 			<h2>
 				Login Context Serial Number is <span id="sn"><%=(String) session.getAttribute("contextSerialNumber")%></span>
 			</h2>
