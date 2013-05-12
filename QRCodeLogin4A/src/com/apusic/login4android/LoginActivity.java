@@ -112,7 +112,9 @@ public class LoginActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
         case R.id.menu_preference:
-        	showPreferences();
+        	Intent intent = new Intent();  
+            intent.setClass(LoginActivity.this, PreferencesActivity.class);
+            startActivity(intent); 
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -267,20 +269,13 @@ public class LoginActivity extends Activity {
 		       .setCancelable(false)
 		       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
-		        	    Intent intent = new Intent();  
-		                intent.setClass(LoginActivity.this, PreferencesActivity.class);
-		                startActivity(intent); 
-		       			finish();
+		        	   Intent intent = new Intent();  
+		               intent.setClass(LoginActivity.this, PreferencesActivity.class);
+		               startActivity(intent); 
 		           }
 		       });
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
 	
-	private void showPreferences() {
-		Intent intent = new Intent();  
-        intent.setClass(LoginActivity.this, PreferencesActivity.class);
-        startActivity(intent); 
-		finish();
-	}
 }

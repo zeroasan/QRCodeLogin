@@ -63,18 +63,19 @@ public final class R {
         public static final int login_form=0x7f08000c;
         public static final int login_status=0x7f08000a;
         public static final int login_status_message=0x7f08000b;
-        public static final int menu_preference=0x7f080015;
-        public static final int menu_settings=0x7f080014;
+        public static final int logout_button=0x7f080012;
+        public static final int menu_preference=0x7f080016;
+        public static final int menu_settings=0x7f080015;
         public static final int open_scan_button=0x7f080011;
         public static final int password=0x7f08000e;
-        public static final int preview_view=0x7f080012;
+        public static final int preview_view=0x7f080013;
         public static final int quit=0x7f080004;
         public static final int restart_preview=0x7f080005;
         public static final int return_scan_result=0x7f080006;
         public static final int sign_in_button=0x7f080010;
         public static final int submit_grant_button=0x7f080008;
         public static final int username=0x7f08000d;
-        public static final int viewfinder_view=0x7f080013;
+        public static final int viewfinder_view=0x7f080014;
     }
     public static final class layout {
         public static final int activity_grant=0x7f030000;
@@ -106,6 +107,7 @@ public final class R {
         public static final int grant_success=0x7f09002d;
         public static final int hello_world=0x7f090024;
         public static final int login_progress_signing_in=0x7f090034;
+        public static final int logout_button=0x7f09003d;
         public static final int menu_encode_mecard=0x7f090002;
         public static final int menu_encode_vcard=0x7f090003;
         public static final int menu_forgot_password=0x7f090033;

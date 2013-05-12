@@ -1,5 +1,6 @@
 package com.apusic.login4android;
 
+import com.apusic.login.client.impl.QRLoginServiceImpl;
 import com.apusic.login.zxing.CaptureActivity;
 
 import android.os.Bundle;
@@ -28,6 +29,10 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this, CaptureActivity.class);  
 		startActivity(intent);
+	}
+	
+	public void logoutUser(View view) {
+		QRLoginServiceImpl.getInstance().logout();
 		finish();
 	}
 

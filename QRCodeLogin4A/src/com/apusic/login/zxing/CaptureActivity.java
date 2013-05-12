@@ -35,6 +35,7 @@ import android.view.WindowManager;
 
 import com.apusic.login.zxing.camera.CameraManager;
 import com.apusic.login4android.GrantActivity;
+import com.apusic.login4android.MainActivity;
 import com.apusic.login4android.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -146,14 +147,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.shutdown();
     super.onDestroy();
   }
-
+  
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
-      case KeyEvent.KEYCODE_BACK:
-          setResult(RESULT_CANCELED);
-          finish();
-          return true;
       case KeyEvent.KEYCODE_FOCUS:
       case KeyEvent.KEYCODE_CAMERA:
         // Handle these events so they don't launch the Camera app
@@ -210,7 +207,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     startActivity(intent);
     finish();
   }
-
 
   private void initCamera(SurfaceHolder surfaceHolder) {
     if (surfaceHolder == null) {

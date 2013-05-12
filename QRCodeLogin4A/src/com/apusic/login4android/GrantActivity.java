@@ -42,9 +42,6 @@ public class GrantActivity extends Activity {
 	
 	//取消授权
 	public void cancelGrant(View view) {
-		Intent intent = new Intent();  
-        intent.setClass(GrantActivity.this, MainActivity.class);
-        startActivity(intent); 
 		finish();
 	}
 	
@@ -72,9 +69,6 @@ public class GrantActivity extends Activity {
 			       .setCancelable(false)
 			       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
-			        	    Intent intent = new Intent();  
-			                intent.setClass(activity, MainActivity.class);
-			                startActivity(intent); 
 			       			finish();
 			           }
 			       });

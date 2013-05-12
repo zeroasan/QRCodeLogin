@@ -16,6 +16,7 @@
 
 package com.apusic.login4android;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ public final class PreferencesActivity extends PreferenceActivity
     PreferenceScreen preferences = getPreferenceScreen();
     preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
   }
-
+  
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
   }

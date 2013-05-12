@@ -13,4 +13,14 @@
         android:text="@string/open_scan_button" 
         android:onClick="startScan"/>
 
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/open_scan_button"
+        android:layout_below="@+id/open_scan_button"
+        android:layout_marginTop="17dp"
+        android:onClick="logoutUser"
+        android:text="@string/logout_button" />
+
 </RelativeLayout>

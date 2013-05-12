@@ -10,6 +10,8 @@ public interface QRLoginService {
 	 */
 	boolean grant(String serialNumber);
 
+	void logout();
+
 	void refreshSession() throws Exception;
 
 }

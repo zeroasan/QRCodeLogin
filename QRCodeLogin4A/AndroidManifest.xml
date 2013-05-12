@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -30,9 +30,12 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.apusic.login4android.MainActivity"
+            android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="com.apusic.login.zxing.CaptureActivity"
@@ -44,10 +47,6 @@
         <activity
             android:name="com.apusic.login4android.GrantActivity"
             android:label="@string/title_activity_grant" >
-        </activity>
-        <activity
-            android:name="com.apusic.login4android.MainActivity"
-            android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="com.apusic.login4android.PreferencesActivity"

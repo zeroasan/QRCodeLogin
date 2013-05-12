@@ -131,4 +131,11 @@ public class QRLoginServiceImpl implements QRLoginService {
 		return false;
 	}
 
+	@Override
+	public void logout() {
+		jsessionId = null;
+		username = null;
+		password = null;
+	}
+
 }
