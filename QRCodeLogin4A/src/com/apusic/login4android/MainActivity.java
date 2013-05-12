@@ -1,13 +1,13 @@
 package com.apusic.login4android;
 
-import com.apusic.login.client.impl.QRLoginServiceImpl;
-import com.apusic.login.zxing.CaptureActivity;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+
+import com.apusic.login.client.impl.QRLoginServiceImpl;
+import com.apusic.login4android.zxing.CaptureActivity;
 
 public class MainActivity extends Activity {
 

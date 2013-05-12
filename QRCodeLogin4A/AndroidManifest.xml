@@ -38,7 +38,7 @@
             android:label="@string/title_activity_main" >
         </activity>
         <activity
-            android:name="com.apusic.login.zxing.CaptureActivity"
+            android:name="com.apusic.login4android.zxing.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
