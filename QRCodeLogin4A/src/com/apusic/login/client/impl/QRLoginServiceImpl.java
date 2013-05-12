@@ -42,7 +42,7 @@ public class QRLoginServiceImpl implements QRLoginService {
 		
 		HttpClient client = new HttpClient();
 		PostMethod httpPost = new PostMethod(loginUrl);
-		httpPost.setContentChunked(true);
+		httpPost.setContentChunked(false);
 		httpPost.setParameter("username", username);
 		httpPost.setParameter("password", password);
 		
@@ -113,7 +113,7 @@ public class QRLoginServiceImpl implements QRLoginService {
 		try {
 			HttpClient client = new HttpClient();
 			PostMethod httpPost = new PostMethod(grantUrl);
-			httpPost.setContentChunked(true);
+			httpPost.setContentChunked(false);
 			String sessionCookie = jsessionId;
 			httpPost.addRequestHeader("Cookie", sessionCookie);
 			httpPost.addParameter("sn", sn);
@@ -137,5 +137,16 @@ public class QRLoginServiceImpl implements QRLoginService {
 		username = null;
 		password = null;
 	}
+	
+	
+//	public static void main(String[] args) throws Exception {
+//		String appUrl = "http://qrlogin.sinaapp.com/1/qrlogin";
+//		String username = "zhengwei";
+//		String password = "123456";
+//		
+//		QRLoginServiceImpl.createInstance(appUrl, username, password);
+//		
+//		QRLoginServiceImpl.getInstance().refreshSession();
+//	}
 
 }

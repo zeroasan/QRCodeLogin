@@ -48,7 +48,7 @@
 				try { console.log("status=" + data.status); } catch(e){};
 				if (data.status == 0) {
 					//relocate to welcome page
-					window.location = "<%=request.getContextPath() %>";
+					window.location = "<%=request.getContextPath() %>" + "/";
 				} else {
 					//check again after 3 seconds
 					setTimeout(checkLoginStatus, 3000);
@@ -110,6 +110,9 @@
 			<h2>
 				Login Context Serial Number is <span id="sn"><%=(String) session.getAttribute("contextSerialNumber")%></span>
 			</h2>
+		</div>
+		<div>
+			<a href="https://github.com/zeroasan/QRCodeLogin/raw/master/bin/20130512/QRCodeLogin4A.apk">下载Android应用</a>
 		</div>
 	</div>
 	<!-- /container -->
